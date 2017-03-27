@@ -30,6 +30,14 @@
 
 #define CONFIG_ENV_IS_IN_MMC
 
+#ifndef CONFIG_SYS_MMCSD_FS_BOOT_PARTITION
+#define CONFIG_SYS_MMCSD_FS_BOOT_PARTITION 1
+#endif
+
+#ifndef CONFIG_SYS_MMCSD_FS_OS_PARTITION
+#define CONFIG_SYS_MMCSD_FS_OS_PARTITION 2
+#endif
+
 /* Extra Environment */
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	"loadaddr=" __stringify(CONFIG_SYS_LOAD_ADDR) "\0" \
@@ -37,11 +45,15 @@
 		"bootm ${loadaddr} - ${fdt_addr}\0" \
 	"bootimage=zImage\0" \
 	"fdt_addr=100\0" \
-	"fdtimage=socfpga_cyclone5_de10_sockit.dtb\0" \
+	"fdtimage=socfpga.dtb\0" \
+	"fpgadata=0x02000000\0" \
+	"core=soc_system.rbf\0" \
+	"fpgaload=fatload mmc 0:$mmc_boot $fpgadata $core; fpga load 0 $fpgadata $filesize; bridge enable\0" \
+	"ethaddr=02:03:04:05:06:07\0" \
 	"bootm ${loadaddr} - ${fdt_addr}\0" \
 	"mmc_boot=" __stringify(CONFIG_SYS_MMCSD_FS_BOOT_PARTITION) "\0" \
 	"mmc_os=" __stringify(CONFIG_SYS_MMCSD_FS_OS_PARTITION) "\0" \
-	"mmcroot=/dev/mmcblk0p${mmc_os}\0" \
+	"mmcroot=/dev/mmcblk0p" __stringify(CONFIG_SYS_MMCSD_FS_OS_PARTITION) "\0" \
 	"mmcboot=setenv bootargs " CONFIG_BOOTARGS \
 		" root=${mmcroot} rw rootwait;" \
 		"bootz ${loadaddr} - ${fdt_addr}\0" \
