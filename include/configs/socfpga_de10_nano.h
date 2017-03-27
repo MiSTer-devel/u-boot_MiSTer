@@ -58,6 +58,8 @@
 		" root=${mmcroot} rw rootwait;" \
 		"bootz ${loadaddr} - ${fdt_addr}\0" \
 	"mmcload=mmc rescan;" \
+		"load mmc 0:${mmc_boot} ${loadaddr} u-boot.scr;" \
+		"source ${loadaddr};" \
 		"load mmc 0:${mmc_boot} ${loadaddr} ${bootimage};" \
 		"load mmc 0:${mmc_boot} ${fdt_addr} ${fdtimage}\0" \
 
