@@ -55,6 +55,43 @@ DEFINE_ALIGN_BUFFER(uint8_t, status_buffer_addr, DWC2_STATUS_BUF_SIZE,
 static struct dwc2_priv local;
 #endif
 
+#define GPVNDCTL_NEW	(1 << 25)
+#define GPVNDCTL_S_DONE	(1 << 27)
+#define GPVNDCTL_RW	(1 << 22)
+
+/*
+ * Read ULPI PHY register 'reg'.
+ */
+static unsigned int _dwc2_ulpi_reg_read(struct dwc2_core_regs *regs, unsigned int reg)
+{
+	unsigned long val = 0, timeout = 100;
+
+	writel(GPVNDCTL_NEW | (reg << 16), &regs->gpvndctl);
+	val = readl(&regs->gpvndctl);
+	while (!(val & GPVNDCTL_S_DONE) && timeout--) val = readl(&regs->gpvndctl);
+
+	val = readl(&regs->gpvndctl);
+	return val & 0xFF;
+}
+
+/*
+ * Write UPLI PHY register 'reg'
+ */
+/*
+static unsigned int _dwc2_ulpi_reg_write(struct dwc2_core_regs *regs, unsigned int reg, unsigned int data)
+{
+	unsigned long val, timeout = 10;
+
+	writel(GPVNDCTL_NEW | GPVNDCTL_RW | (reg << 16) | (data & 0xFF), &regs->gpvndctl);
+
+	val = readl(&regs->gpvndctl);
+	while (!(val & GPVNDCTL_S_DONE) && timeout--) val = readl(&regs->gpvndctl);
+	val = readl(&regs->gpvndctl);
+
+	return 0;
+}
+*/
+
 /*
  * DWC2 IP interface
  */
@@ -176,6 +213,12 @@ static void dwc_otg_core_host_init(struct dwc2_core_regs *regs)
 	uint32_t ptxfifosize = 0;
 	uint32_t hprt0 = 0;
 	int i, ret, num_channels;
+
+	ret = _dwc2_ulpi_reg_read(regs, 0x13);
+	if(ret & 0x10) {
+		printf("OTG cable is not connected. Give up!\n");
+		return;
+	}
 
 	/* Restart the Phy Clock */
 	writel(0, &regs->pcgcctl);
