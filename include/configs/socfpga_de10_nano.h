@@ -38,8 +38,11 @@
 #define CONFIG_SYS_MMCSD_FS_OS_PARTITION 2
 #endif
 
+#define CONFIG_PREBOOT
+
 /* Extra Environment */
 #define CONFIG_EXTRA_ENV_SETTINGS \
+	"preboot=usb start\0" \
 	"loadaddr=" __stringify(CONFIG_SYS_LOAD_ADDR) "\0" \
 	"ramboot=setenv bootargs " CONFIG_BOOTARGS ";" \
 		"bootm ${loadaddr} - ${fdt_addr}\0" \
