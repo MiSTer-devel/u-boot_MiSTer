@@ -8,6 +8,8 @@
 
 #include <asm/arch/base_addr_ac5.h>
 
+#define CONFIG_SYS_BOOTM_LEN	(64 << 20)
+
 /* U-Boot Commands */
 #define CONFIG_FAT_WRITE
 #define CONFIG_HW_WATCHDOG
@@ -37,8 +39,6 @@
 #ifndef CONFIG_SYS_MMCSD_FS_OS_PARTITION
 #define CONFIG_SYS_MMCSD_FS_OS_PARTITION 2
 #endif
-
-#define CONFIG_PREBOOT
 
 /* Extra Environment */
 #define CONFIG_EXTRA_ENV_SETTINGS \
