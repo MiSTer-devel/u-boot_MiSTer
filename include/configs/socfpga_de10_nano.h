@@ -19,7 +19,7 @@
 
 /* Booting Linux */
 #define CONFIG_BOOTFILE		"fitImage"
-#define CONFIG_BOOTARGS		"console=ttyS0," __stringify(CONFIG_BAUDRATE) " mem=512M memmap=512M$512M"
+#define CONFIG_BOOTARGS		"console=ttyS0," __stringify(CONFIG_BAUDRATE) " ${v} mem=512M memmap=512M$512M"
 #define CONFIG_BOOTCOMMAND	"run mmcload; run mmcboot"
 #define CONFIG_LOADADDR		0x01000000
 #define CONFIG_SYS_LOAD_ADDR	CONFIG_LOADADDR
@@ -59,7 +59,8 @@
 	"mmc_boot=" __stringify(CONFIG_SYS_MMCSD_FS_BOOT_PARTITION) "\0" \
 	"mmc_os=" __stringify(CONFIG_SYS_MMCSD_FS_OS_PARTITION) "\0" \
 	"mmcroot=/dev/mmcblk0p" __stringify(CONFIG_SYS_MMCSD_FS_OS_PARTITION) "\0" \
-	"mmcboot=setenv bootargs " CONFIG_BOOTARGS " root=${mmcroot} rw rootwait;" "bootz ${loadaddr} - ${fdt_addr}\0" \
+	"v=loglevel=4\0" \
+	"mmcboot=setenv bootargs " CONFIG_BOOTARGS " root=${mmcroot} ro rootwait;" "bootz ${loadaddr} - ${fdt_addr}\0" \
 	"mmcload=mmc rescan;" \
 		"run fpgaload;" \
 		"run scrtest;" \
