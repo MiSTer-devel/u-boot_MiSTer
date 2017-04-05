@@ -336,6 +336,9 @@ const char *bootdelay_process(void)
 	process_fdt_options(gd->fdt_blob);
 	stored_bootdelay = bootdelay;
 
+#ifdef CONFIG_TARGET_SOCFPGA_TERASIC_DE10_NANO
+	if(!(readl(0xff709050) & 0x2000000)) s = 0;
+#endif
 	return s;
 }
 
