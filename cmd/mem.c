@@ -150,6 +150,35 @@ static int do_mem_md(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	return (rc);
 }
 
+/* Memory Test
+ *
+ * Syntax:
+ *	mt{.b, .w, .l, .q} {addr} {value}
+ */
+static int do_mem_mt(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
+{
+	ulong	addr, val;
+
+	int size;
+	int rc = 0;
+
+	if (argc < 3) return CMD_RET_USAGE;
+
+	if ((size = cmd_get_data_size(argv[0], 4)) < 0) return 1;
+
+	addr = simple_strtoul(argv[1], NULL, 16);
+	addr += base_address;
+
+	val = simple_strtoul(argv[2], NULL, 16);
+
+	const void *buf = map_sysmem(addr, size);
+	
+	rc = memcmp(buf, &val, size) ? 1 : 0;
+
+	unmap_sysmem(buf);
+	return (rc);
+}
+
 static int do_mem_mm(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 {
 	return mod_mem (cmdtp, 1, flag, argc, argv);
@@ -1225,6 +1254,12 @@ U_BOOT_CMD(
 #else
 	"[.b, .w, .l] address [# of objects]"
 #endif
+);
+
+U_BOOT_CMD(
+	mt,	3,	1,	do_mem_mt,
+	"memory test against value",
+	"[.b, .w, .l] address value"
 );
 
 
