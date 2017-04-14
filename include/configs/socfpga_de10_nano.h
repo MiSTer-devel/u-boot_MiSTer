@@ -11,7 +11,7 @@
 #define CONFIG_SYS_BOOTM_LEN	(64 << 20)
 
 /* U-Boot Commands */
-#define CONFIG_FAT_WRITE
+#define CONFIG_FS_FAT
 #define CONFIG_HW_WATCHDOG
 
 /* Memory configurations */
