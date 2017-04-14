@@ -3534,7 +3534,7 @@ static void debug_mem_calibrate(int pass)
 	u32 debug_info;
 
 	if (pass) {
-		printf("%s: CALIBRATION PASSED\n", __FILE__);
+		//printf("%s: CALIBRATION PASSED\n", __FILE__);
 
 		gbl->fom_in /= 2;
 		gbl->fom_out /= 2;
@@ -3570,7 +3570,7 @@ static void debug_mem_calibrate(int pass)
 		writel(debug_info, &sdr_reg_file->failing_stage);
 	}
 
-	printf("%s: Calibration complete\n", __FILE__);
+	//printf("%s: Calibration complete\n", __FILE__);
 }
 
 /**
@@ -3741,7 +3741,7 @@ int sdram_calibration_full(void)
 
 	initialize_tracking();
 
-	printf("%s: Preparing to start memory calibration\n", __FILE__);
+	//printf("%s: Preparing to start memory calibration\n", __FILE__);
 
 	debug("%s:%d\n", __func__, __LINE__);
 	debug_cond(DLEVEL >= 1,
