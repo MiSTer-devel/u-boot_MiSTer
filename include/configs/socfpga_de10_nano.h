@@ -48,8 +48,8 @@
 	"fdt_addr=100\0" \
 	"fdtimage=socfpga.dtb\0" \
 	"fpgadata=0x02000000\0" \
-	"core=/boot/init.rbf\0" \
-	"fpgaload=if mt 0xFFD05054 0;then load mmc 0:$mmc_os $fpgadata $core;fpga load 0 $fpgadata $filesize;bridge enable;mw 0xFFD05054 0x12345678;fi\0" \
+	"core=menu.rbf\0" \
+	"fpgaload=if mt 0xFFD05054 0;then load mmc 0:$mmc_boot $fpgadata $core;fpga load 0 $fpgadata $filesize;bridge enable;mw 0xFFD05054 0x12345678;fi\0" \
 	"scrload1=load mmc 0:$mmc_boot $loadaddr u-boot.scr;source $loadaddr\0" \
 	"scrload2=load mmc 0:$mmc_os $loadaddr u-boot.scr;source $loadaddr\0" \
 	"scrtest=if test -e mmc 0:$mmc_boot /u-boot.scr;then run scrload1;fi;" \
