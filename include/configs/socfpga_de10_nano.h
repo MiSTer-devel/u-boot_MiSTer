@@ -49,8 +49,8 @@
 	"fdtimage=socfpga.dtb\0" \
 	"fpgadata=0x02000000\0" \
 	"core=menu.rbf\0" \
-	"fpgacheck=if mt 0xFFD05054 0;then run fpgaload;else if mt 0x1FFFF000 0x87654321;then env import 0x1FFFF004;mw 0x1FFFF000 0;run fpgaload;fi;fi\0" \
-	"fpgaload=load mmc 0:$mmc_boot $fpgadata $core;fpga load 0 $fpgadata $filesize;bridge enable;mw 0xFFD05054 0x12345678\0" \
+	"fpgacheck=if mt 0xFFD05054 0;then run fpgaload;else if mt 0x1FFFF000 0x87654321;then env import 0x1FFFF004;run fpgaload;fi;fi\0" \
+	"fpgaload=load mmc 0:$mmc_boot $fpgadata $core;fpga load 0 $fpgadata $filesize;bridge enable;mw 0x1FFFF000 0;mw 0xFFD05054 0x12345678\0" \
 	"scrload1=load mmc 0:$mmc_boot $loadaddr u-boot.scr;source $loadaddr\0" \
 	"scrload2=load mmc 0:$mmc_os $loadaddr u-boot.scr;source $loadaddr\0" \
 	"scrtest=if test -e mmc 0:$mmc_boot /u-boot.scr;then run scrload1;fi;" \
