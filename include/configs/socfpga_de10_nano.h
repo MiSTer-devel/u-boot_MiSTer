@@ -20,7 +20,7 @@
 /* Booting Linux */
 #define CONFIG_BOOTFILE		"fitImage"
 #define CONFIG_BOOTARGS		"console=ttyS0," __stringify(CONFIG_BAUDRATE) " $v loop.max_part=8 isolcpus=1 mem=511M memmap=513M$511M"
-#define CONFIG_BOOTCOMMAND	"run mmcload; run mmcboot"
+#define CONFIG_BOOTCOMMAND	"mw 0xff709004 0x800; run mmcload; run mmcboot"
 #define CONFIG_LOADADDR		0x01000000
 #define CONFIG_SYS_LOAD_ADDR	CONFIG_LOADADDR
 
