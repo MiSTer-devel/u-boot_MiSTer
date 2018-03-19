@@ -15,7 +15,7 @@
 #define CONFIG_HW_WATCHDOG
 
 /* Memory configurations */
-#define PHYS_SDRAM_1_SIZE		0x40000000	/* 1GiB */
+#define PHYS_SDRAM_1_SIZE	0x40000000	/* 1GiB */
 
 /* Booting Linux */
 #define CONFIG_BOOTFILE		"fitImage"
@@ -38,17 +38,14 @@
 
 /* Extra Environment */
 #define CONFIG_EXTRA_ENV_SETTINGS \
-	"preboot=usb start\0" \
 	"loadaddr=" __stringify(CONFIG_SYS_LOAD_ADDR) "\0" \
-	"bootimage=zImage_dtb\0" \
+	"bootimage=/linux/zImage_dtb\0" \
 	"fdt_addr=100\0" \
-	"fdtimage=socfpga.dtb\0" \
 	"fpgadata=0x02000000\0" \
 	"core=menu.rbf\0" \
-	"fpgacheck=if mt 0xFFD05054 0;then run fpgaload;else if mt 0x1FFFF000 0x87654321;then env import 0x1FFFF004;run fpgaload;fi;fi\0" \
-	"fpgaload=load mmc 0:$mmc_boot $fpgadata $core;fpga load 0 $fpgadata $filesize;bridge enable;mw 0x1FFFF000 0;mw 0xFFD05054 0x12345678\0" \
-	"scrload1=load mmc 0:$mmc_boot $loadaddr /linux/u-boot.scr;source $loadaddr\0" \
-	"scrtest=if test -e mmc 0:$mmc_boot /linux/u-boot.scr;then run scrload1;fi\0" \
+	"fpgacheck=if mt 0xFFD05054 0;then run fpgaload;else if mt 0x1FFFF000 0x87654321;then mw 0x1FFFF000 0;env import -t 0x1FFFF004;run fpgaload;fi;fi\0" \
+	"fpgaload=load mmc 0:$mmc_boot $fpgadata $core;fpga load 0 $fpgadata $filesize;bridge enable;mw 0x1FFFF000 0;mw 0xFFD05054 0\0" \
+	"scrtest=if test -e mmc 0:$mmc_boot /linux/u-boot.txt;then load mmc 0:$mmc_boot $loadaddr /linux/u-boot.txt;env import -t $loadaddr;fi\0" \
 	"ethaddr=02:03:04:05:06:07\0" \
 	"bootm $loadaddr - $fdt_addr\0" \
 	"mmc_boot=" __stringify(CONFIG_SYS_MMCSD_FS_BOOT_PARTITION) "\0" \
@@ -58,7 +55,7 @@
 	"mmcload=mmc rescan;" \
 		"run fpgacheck;" \
 		"run scrtest;" \
-		"load mmc 0:$mmc_boot $loadaddr /linux/$bootimage;" \
+		"load mmc 0:$mmc_boot $loadaddr $bootimage;" \
 		"setexpr.l fdt_addr $loadaddr + 0x2C;" \
 		"setexpr.l fdt_addr *$fdt_addr + $loadaddr\0"
 
