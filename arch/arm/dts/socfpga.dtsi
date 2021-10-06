@@ -59,31 +59,6 @@
 		interrupt-parent = <&intc>;
 		ranges;
 
-		amba {
-			compatible = "arm,amba-bus";
-			#address-cells = <1>;
-			#size-cells = <1>;
-			ranges;
-
-			pdma: pdma@ffe01000 {
-				compatible = "arm,pl330", "arm,primecell";
-				reg = <0xffe01000 0x1000>;
-				interrupts = <0 104 4>,
-					     <0 105 4>,
-					     <0 106 4>,
-					     <0 107 4>,
-					     <0 108 4>,
-					     <0 109 4>,
-					     <0 110 4>,
-					     <0 111 4>;
-				#dma-cells = <1>;
-				#dma-channels = <8>;
-				#dma-requests = <32>;
-				clocks = <&l4_main_clk>;
-				clock-names = "apb_pclk";
-			};
-		};
-
 		can0: can@ffc00000 {
 			compatible = "bosch,d_can";
 			reg = <0xffc00000 0x1000>;
@@ -607,12 +582,6 @@
 			reg = <0xffc25000 0x1000>;
 		};
 
-		sdramedac {
-			compatible = "altr,sdram-edac";
-			altr,sdr-syscon = <&sdr>;
-			interrupts = <0 39 4>;
-		};
-
 		L2: l2-cache@fffef000 {
 			compatible = "arm,pl310-cache";
 			reg = <0xfffef000 0x1000>;
@@ -742,12 +711,6 @@
 			reg = <0xffd05000 0x1000>;
 		};
 
-		usbphy0: usbphy@0 {
-			#phy-cells = <0>;
-			compatible = "usb-nop-xceiv";
-			status = "okay";
-		};
-
 		usb0: usb@ffb00000 {
 			compatible = "snps,dwc2";
 			reg = <0xffb00000 0xffff>;
@@ -790,5 +753,44 @@
 			compatible = "altr,sys-mgr", "syscon";
 			reg = <0xffd08000 0x4000>;
 		};
+	};
+	
+	amba {
+		compatible = "arm,amba-bus";
+		#address-cells = <1>;
+		#size-cells = <1>;
+		interrupt-parent = <&intc>;
+		ranges;
+
+		pdma: pdma@ffe01000 {
+			compatible = "arm,pl330", "arm,primecell";
+			reg = <0xffe01000 0x1000>;
+			interrupts = <0 104 4>,
+				     <0 105 4>,
+				     <0 106 4>,
+				     <0 107 4>,
+				     <0 108 4>,
+				     <0 109 4>,
+				     <0 110 4>,
+				     <0 111 4>;
+			#dma-cells = <1>;
+			#dma-channels = <8>;
+			#dma-requests = <32>;
+			clocks = <&l4_main_clk>;
+			clock-names = "apb_pclk";
+		};
+	};
+
+	sdramedac {
+		compatible = "altr,sdram-edac";
+		altr,sdr-syscon = <&sdr>;
+		interrupt-parent = <&intc>;
+		interrupts = <0 39 4>;
+	};
+
+	usbphy0: usbphy {
+		#phy-cells = <0>;
+		compatible = "usb-nop-xceiv";
+		status = "okay";
 	};
 };

@@ -22,12 +22,6 @@
 #include <linux/ctype.h>
 #include "ff.h"
 
-#ifdef CONFIG_SUPPORT_VFAT
-static const int vfat_enabled = 1;
-#else
-static const int vfat_enabled = 0;
-#endif
-
 static struct blk_desc *cur_dev;
 static disk_partition_t cur_part_info;
 
