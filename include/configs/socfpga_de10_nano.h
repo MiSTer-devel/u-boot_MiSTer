@@ -43,7 +43,7 @@
 	"fdt_addr=100\0" \
 	"fpgadata=0x02000000\0" \
 	"core=menu.rbf\0" \
-	"fpgacheck=if mt 0xFFD05054 0;then run fpgaload;else if mt 0x1FFFF000 0x87654321;then mw 0x1FFFF000 0;env import -t 0x1FFFF004;run fpgaload;fi;fi\0" \
+	"fpgacheck=if mt 0x1FFFFF08 0xBEEFB001;then mw 0x1FFFFF08 0;if mt 0x1FFFF000 0x87654321;then mw 0x1FFFF000 0;env import -t 0x1FFFF004;run fpgaload;fi;else run fpgaload;fi\0" \
 	"fpgaload=load mmc 0:$mmc_boot $fpgadata $core;fpga load 0 $fpgadata $filesize;bridge enable;mw 0x1FFFF000 0;mw 0xFFD05054 0\0" \
 	"scrtest=if test -e mmc 0:$mmc_boot /linux/u-boot.txt;then load mmc 0:$mmc_boot $loadaddr /linux/u-boot.txt;env import -t $loadaddr;fi\0" \
 	"ethaddr=02:03:04:05:06:07\0" \
